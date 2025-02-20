@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Life Coach - 你的个人成长助手</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header class="header">
+        <h1>AI Life Coach</h1>
+        <p class="subtitle">你的个人成长助手，随时为你提供建议与指导</p>
+    </header>
+
+    <!-- 主要对话区域 -->
+    <main class="chat-container">
+        <!-- 聊天记录显示区域 -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- 欢迎消息 -->
+            <div class="message system">
+                <p>欢迎来到 AI Life Coach！我是你的个人成长助手，让我们开始对话吧。</p>
+            </div>
+        </div>
+
+        <!-- 消息输入区域 -->
+        <div class="input-container">
+            <textarea 
+                id="messageInput" 
+                placeholder="输入你的问题或想法..."
+                rows="3"
+                autofocus
+            ></textarea>
+            <button id="sendButton" class="send-button">发送</button>
+        </div>
+    </main>
+
+    <!-- 加载脚本 -->
+    <script src="app.js"></script>
+</body>
+</html>
