@@ -13,8 +13,13 @@ app.use(express.json());
 app.use(express.static('.'));
 
 // DeepSeek R1 API 配置
-const API_KEY = process.env.API_KEY || '79af0354-8d06-468d-b05d-5c2eb053e1c7';
-const API_URL = process.env.API_URL || 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';
+const API_KEY = process.env.API_KEY;
+const API_URL = process.env.API_URL;
+
+if (!API_KEY || !API_URL) {
+    console.error('错误：缺少必要的环境变量。请确保设置了 API_KEY 和 API_URL。');
+    process.exit(1);
+}
 
 // 系统提示词
 const SYSTEM_PROMPT = `你是一位专业的 Life Coach，拥有丰富的个人成长和生活指导经验。你的目标是：
