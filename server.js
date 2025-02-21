@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+// 加载环境变量
+dotenv.config();
 
 const app = express();
 const port = 3000;
