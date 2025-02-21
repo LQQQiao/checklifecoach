@@ -57,33 +57,9 @@ async function handleUserInput() {
             if (done) break;
 
             const text = decoder.decode(value, { stream: true });
-            const lines = text.split('\n').filter(line => line.trim() !== '');
-
-            for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    const data = line.slice(6);
-                    if (data === '[DONE]') {
-                        break;
-                    }
-                    try {
-                        const parsed = JSON.parse(data);
-                        const content = parsed.choices[0].delta.content || '';
-                        if (content) {
-                            aiResponse += content;
-                            aiMessageContent.innerHTML = aiResponse.replace(/\n/g, '<br>');
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }
-                    } catch (e) {
-                        console.error('解析响应数据失败:', e);
-                        continue;
-                    }
-                } else {
-                    // 处理普通文本响应
-                    aiResponse += text;
-                    aiMessageContent.innerHTML = aiResponse.replace(/\n/g, '<br>');
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-            }
+            aiResponse += text;
+            aiMessageContent.innerHTML = aiResponse.replace(/\n/g, '<br>');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     } catch (error) {
         console.error('请求失败:', error);
@@ -102,7 +78,7 @@ messageInput.addEventListener('keypress', (e) => {
     }
 });
 
-// 输入框自适应高度
+// 自适应文本框高度
 messageInput.addEventListener('input', () => {
     messageInput.style.height = 'auto';
     messageInput.style.height = messageInput.scrollHeight + 'px';
