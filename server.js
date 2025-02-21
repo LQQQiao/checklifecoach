@@ -80,7 +80,7 @@ app.post('/chat', async (req, res) => {
                             const parsed = JSON.parse(data);
                             const content = parsed.choices[0].delta.content || '';
                             if (content) {
-                                res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                                res.write(content);
                             }
                         } catch (e) {
                             console.error('解析响应数据失败:', e);

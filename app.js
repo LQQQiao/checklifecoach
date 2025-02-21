@@ -7,7 +7,12 @@ const sendButton = document.getElementById('sendButton');
 function addMessage(content, type = 'user') {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${type}`;
-    messageDiv.innerHTML = `<p>${content}</p>`;
+    const paragraph = document.createElement('p');
+    // 使用 textContent 而不是 innerHTML 来防止 XSS
+    paragraph.textContent = content;
+    // 将换行符转换为 <br>
+    paragraph.innerHTML = paragraph.textContent.replace(/\n/g, '<br>');
+    messageDiv.appendChild(paragraph);
     chatMessages.appendChild(messageDiv);
     // 滚动到最新消息
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -51,7 +56,7 @@ async function handleUserInput() {
             const { value, done } = await reader.read();
             if (done) break;
 
-            const text = decoder.decode(value);
+            const text = decoder.decode(value, { stream: true });
             const lines = text.split('\n').filter(line => line.trim() !== '');
 
             for (const line of lines) {
@@ -62,14 +67,21 @@ async function handleUserInput() {
                     }
                     try {
                         const parsed = JSON.parse(data);
-                        if (parsed.content) {
-                            aiResponse += parsed.content;
-                            aiMessageContent.textContent = aiResponse;
+                        const content = parsed.choices[0].delta.content || '';
+                        if (content) {
+                            aiResponse += content;
+                            aiMessageContent.innerHTML = aiResponse.replace(/\n/g, '<br>');
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }
                     } catch (e) {
                         console.error('解析响应数据失败:', e);
+                        continue;
                     }
+                } else {
+                    // 处理普通文本响应
+                    aiResponse += text;
+                    aiMessageContent.innerHTML = aiResponse.replace(/\n/g, '<br>');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
             }
         }
