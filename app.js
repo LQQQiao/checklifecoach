@@ -37,7 +37,7 @@ async function handleUserInput() {
 
         // 创建新的 AI 消息容器
         const aiMessageDiv = document.createElement('div');
-        aiMessageDiv.className = 'message ai';
+        aiMessageDiv.className = 'message assistant';
         const aiMessageContent = document.createElement('p');
         aiMessageDiv.appendChild(aiMessageContent);
         chatMessages.appendChild(aiMessageDiv);
