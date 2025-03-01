@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "maxDuration": 60
+      }
     },
     {
       "src": "*.html",
@@ -28,11 +31,6 @@
       "dest": "/$1"
     }
   ],
-  "functions": {
-    "server.js": {
-      "maxDuration": 60
-    }
-  },
   "env": {
     "API_KEY": "@api_key",
     "API_URL": "@api_url"
