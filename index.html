@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Life Coach - 你的个人成长助手</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <!-- 页面头部 -->
@@ -36,6 +37,10 @@
     </main>
 
     <!-- 加载脚本 -->
+    <script type="module">
+        import { init } from './js/background.js';
+        init();
+    </script>
     <script src="app.js"></script>
 </body>
 </html>
