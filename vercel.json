@@ -28,8 +28,10 @@
       "dest": "/$1"
     }
   ],
-  "env": {
-    "API_KEY": "${API_KEY}",
-    "API_URL": "https://ark.cn-beijing.volces.com/api/v3/chat/completions"
-  }
+  "functions": {
+    "server.js": {
+      "maxDuration": 60
+    }
+  },
+  "env": {}
 }

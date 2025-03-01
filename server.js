@@ -36,12 +36,17 @@ const SYSTEM_PROMPT = `你是一位专业的 Life Coach，拥有丰富的个人�
 // 处理聊天请求
 app.post('/chat', async (req, res) => {
     try {
+        console.log('收到聊天请求');
         const userMessage = req.body.message;
 
         // 设置响应头，支持流式输出
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');
+        
+        // 记录环境变量状态（不记录实际值，只记录是否存在）
+        console.log('API_KEY存在:', !!process.env.API_KEY);
+        console.log('API_URL存在:', !!process.env.API_URL);
 
         // 准备请求数据
         const requestData = {
@@ -55,15 +60,27 @@ app.post('/chat', async (req, res) => {
         };
 
         // 发送请求到 DeepSeek R1 API
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
-            },
-            body: JSON.stringify(requestData),
-            timeout: 60000 // 60秒超时
-        });
+        console.log('开始发送API请求...');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 50000); // 50秒后中止请求
+        
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify(requestData),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId); // 清除超时计时器
+            
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+            }
+            console.log('API请求成功，状态码:', response.status);
 
         // 处理流式响应
         for await (const chunk of response.body) {
