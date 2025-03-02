@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // 静态文件服务
-app.use(express.static('.'));
+app.use(express.static('public'));
 
 // DeepSeek R1 API 配置
 const API_KEY = process.env.API_KEY;
@@ -64,8 +64,9 @@ app.post('/chat', async (req, res) => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 50000); // 50秒后中止请求
         
+        let response;
         try {
-            const response = await fetch(API_URL, {
+            response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,6 +82,10 @@ app.post('/chat', async (req, res) => {
                 throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
             }
             console.log('API请求成功，状态码:', response.status);
+        } catch (error) {
+            console.error('API请求失败:', error);
+            throw error;
+        }
 
         // 处理流式响应
         for await (const chunk of response.body) {
